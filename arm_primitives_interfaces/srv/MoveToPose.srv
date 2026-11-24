@@ -1,0 +1,7 @@
+# Move the end-effector link to a pose.
+geometry_msgs/PoseStamped pose     # empty frame_id = arm base frame
+bool linear                        # true = straight-line Cartesian path, false = free-space plan
+float64 velocity_scaling           # (0, 1]; 0 = arm default
+---
+bool success
+string message

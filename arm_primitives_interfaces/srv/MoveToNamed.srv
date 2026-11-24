@@ -1,0 +1,6 @@
+# Move to a named pose from the arm config (named_poses) or the SRDF (group_state).
+string name
+float64 velocity_scaling           # (0, 1]; 0 = arm default
+---
+bool success
+string message

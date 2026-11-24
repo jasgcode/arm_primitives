@@ -1,0 +1,11 @@
+# Python
+.venv/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# colcon (in case it is run from inside the repo)
+build/
+install/
+log/

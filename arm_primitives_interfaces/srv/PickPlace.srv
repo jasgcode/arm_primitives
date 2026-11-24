@@ -1,0 +1,14 @@
+# Pick an object at a grasp pose, or place the held object at a pose.
+string PICK=pick
+string PLACE=place
+
+string operation                   # pick or place
+geometry_msgs/PoseStamped pose     # end-effector pose at the grasp / release point
+string object_name                 # planning-scene object to attach (pick) / detach (place); may be empty
+float64 approach                   # m to back off along the tool z axis before/after; 0 = default
+float64 lift                       # m to lift along base z afterwards; 0 = default
+float64 width                      # pick: expected object width in m; 0 = gripper default
+float64 force                      # pick: grasp force in N; 0 = gripper default
+---
+bool success
+string message

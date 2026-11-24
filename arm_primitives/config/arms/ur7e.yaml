@@ -1,0 +1,61 @@
+# Universal Robots UR7e (no gripper by default).
+# Needs ur_description and ur_moveit_config; a real arm also needs ur_robot_driver
+# (sudo apt install ros-lyrical-ur-robot-driver).
+name: ur7e
+description: Universal Robots UR7e 6-DoF arm
+
+planning_group: ur_manipulator  # chain base_link -> tool0
+base_frame: base_link  # ROS convention base (the UR controller's "base" is rotated 180 deg)
+ee_link: tool0  # tool flange; change to a TCP link once a tool is mounted
+joints:
+  [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint,
+   wrist_3_joint]
+
+attach_link: tool0
+touch_links: [tool0, flange, wrist_3_link]
+tool_down: [1.0, 0.0, 0.0, 0.0]  # x y z w: flange facing straight down
+
+# 'home', 'up' and 'test_configuration' come from the SRDF (ur_moveit_config).
+named_poses:
+  ready:  # elbow up, flange facing down in front of the base
+    shoulder_pan_joint: 0.0
+    shoulder_lift_joint: -1.5708
+    elbow_joint: 1.5708
+    wrist_1_joint: -1.5708
+    wrist_2_joint: -1.5708
+    wrist_3_joint: 0.0
+
+velocity_scaling: 0.2
+acceleration_scaling: 0.2
+planning_time: 5.0
+planning_attempts: 10
+approach_distance: 0.1
+lift_distance: 0.1
+
+gripper:
+  type: none
+  # A gripper with a control_msgs/GripperCommand server (e.g. Robotiq 2F-85) would be:
+  #   type: gripper_command
+  #   namespace: /robotiq_gripper_controller/gripper_cmd
+  #   max_width: 0.085
+  #   open_position: 0.0
+  #   closed_position: 0.8
+  # Set ee_link and touch_links to the gripper's TCP and finger links as well.
+
+# Launch files arm.launch.py includes. {robot_ip} and {rviz} are filled in from its arguments.
+bringup:
+  mock:
+    - package: arm_primitives
+      launch: ur_mock.launch.py  # mock_components hardware + controllers + move_group
+      args: {ur_type: ur7e, rviz: '{rviz}'}
+  real:
+    - package: ur_robot_driver
+      launch: ur_control.launch.py
+      args:
+        ur_type: ur7e
+        robot_ip: '{robot_ip}'
+        launch_rviz: 'false'
+        initial_joint_controller: joint_trajectory_controller  # the one MoveIt is set up for
+    - package: ur_moveit_config
+      launch: ur_moveit.launch.py
+      args: {ur_type: ur7e, launch_rviz: '{rviz}'}

@@ -1,0 +1,9 @@
+# Current state of the arm.
+---
+string arm                               # arm name from the config, e.g. fer or ur7e
+string base_frame                        # frame ee_pose is expressed in
+string ee_link                           # link ee_pose describes
+sensor_msgs/JointState joint_state       # latest joint state of the planning group
+geometry_msgs/PoseStamped ee_pose        # end-effector pose in base_frame
+bool success
+string message

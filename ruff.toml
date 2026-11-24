@@ -1,0 +1,46 @@
+# Ruff config mirroring the ROS 2 ament linters (ament_flake8 + ament_pep257).
+# Reference: /opt/ros/lyrical/lib/python3.14/site-packages/ament_flake8/configuration/ament_flake8.ini
+target-version = "py314"
+line-length = 99
+extend-exclude = ["build", "install", "log"]
+
+[lint]
+# Enables the pycodestyle whitespace/blank-line rules (E1/E2/E3) that flake8 checks.
+preview = true
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "A",   # flake8-builtins
+    "C4",  # flake8-comprehensions
+    "D",   # flake8-docstrings / ament_pep257
+    "I",   # flake8-import-order (google style, see isort below)
+    "Q",   # flake8-quotes
+    "ANN", # require type annotations (pairs with ty)
+]
+# Same ignore list ament_flake8 and ament_pep257 use.
+ignore = [
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",
+    "D203",
+    "D212",
+    "D404",
+]
+
+[lint.per-file-ignores]
+"**/test/**" = ["ANN"]
+"**/setup.py" = ["ANN"]
+
+[lint.flake8-quotes]
+inline-quotes = "single"
+multiline-quotes = "double"
+docstring-quotes = "double"
+
+[lint.isort]
+# Approximates flake8-import-order's google style: modules sorted
+# case-insensitively, `import x` and `from x import y` interleaved.
+force-sort-within-sections = true
+case-sensitive = false
+order-by-type = false
+
+[format]
+quote-style = "single"

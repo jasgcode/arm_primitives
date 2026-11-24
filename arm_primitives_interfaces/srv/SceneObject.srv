@@ -1,0 +1,16 @@
+# Change the MoveIt planning scene.
+string ADD_BOX=add_box
+string ADD_CYLINDER=add_cylinder
+string ADD_SPHERE=add_sphere
+string REMOVE=remove
+string CLEAR=clear
+string ATTACH=attach
+string DETACH=detach
+
+string operation                   # one of the constants above
+string name                        # object id (unused for clear)
+geometry_msgs/PoseStamped pose     # add_*: object pose; empty frame_id = arm base frame
+float64[] dimensions               # box: [x, y, z]; cylinder: [height, radius]; sphere: [radius]
+---
+bool success
+string message

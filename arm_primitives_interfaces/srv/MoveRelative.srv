@@ -1,0 +1,12 @@
+# Move the end-effector by an offset from where it is now.
+string BASE=base
+string TOOL=tool
+
+geometry_msgs/Vector3 translation  # m
+geometry_msgs/Vector3 rotation     # roll, pitch, yaw in rad, applied about the frame's axes
+string frame                       # base (arm base frame axes) or tool (end-effector axes)
+bool linear                        # true = straight-line Cartesian path
+float64 velocity_scaling           # (0, 1]; 0 = arm default
+---
+bool success
+string message

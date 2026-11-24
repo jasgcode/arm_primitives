@@ -1,0 +1,8 @@
+[1] Claude Opus 5.5. Anthropic. Used On: 11/24/2026.
+    Agentic AI (Claude Code). Used to design and write this repository from my request for
+    one package that supports both the Franka FER and the UR7e with shared primitives:
+    the arm config format and the fer/ur7e configs, the Python API (arm, gripper, scene,
+    pick/place), the service interfaces and server, the generic and UR mock launch files,
+    the demo, the unit tests, and the README. Also used to set up the UR description and
+    MoveIt config source builds and to test both arms on mock hardware.
+    - Files written/assisted by AI: all files in this repository.

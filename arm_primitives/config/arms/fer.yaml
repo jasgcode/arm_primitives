@@ -1,0 +1,46 @@
+# Franka Emika Robot (FER, formerly Panda) with the Franka Hand.
+# Needs franka_ros2 (franka_fer_moveit_config, franka_gripper, franka_msgs) and franka_description.
+name: fer
+description: Franka FER 7-DoF arm with Franka Hand
+
+planning_group: fer_manipulator  # chain fer_link0 -> fer_hand_tcp
+base_frame: fer_link0
+ee_link: fer_hand_tcp  # between the fingertips
+joints: [fer_joint1, fer_joint2, fer_joint3, fer_joint4, fer_joint5, fer_joint6, fer_joint7]
+
+attach_link: fer_hand_tcp
+touch_links: [fer_hand, fer_hand_tcp, fer_leftfinger, fer_rightfinger]
+tool_down: [1.0, 0.0, 0.0, 0.0]  # x y z w: hand pointing straight down
+
+# 'ready' and 'extended' come from the SRDF (franka_fer_moveit_config); add more here.
+named_poses: {}
+
+velocity_scaling: 0.2
+acceleration_scaling: 0.2
+planning_time: 5.0
+planning_attempts: 10
+approach_distance: 0.1
+lift_distance: 0.1
+
+gripper:
+  type: franka
+  namespace: fer_gripper  # franka_gripper node: fer_gripper/move, grasp, homing
+  max_width: 0.08
+  min_width: 0.0
+  speed: 0.05
+  force: 20.0
+  epsilon: 0.01
+  # The same node also serves a GripperCommand action, usable with
+  #   type: gripper_command, namespace: fer_gripper/gripper_action,
+  #   open_position: 0.04, closed_position: 0.0   (position = half the width)
+
+# Launch files arm.launch.py includes. {robot_ip} and {rviz} are filled in from its arguments.
+bringup:
+  mock:
+    - package: franka_fer_moveit_config
+      launch: demo.launch.py  # mock hardware + mock gripper + move_group
+      args: {use_rviz: '{rviz}'}
+  real:
+    - package: franka_fer_moveit_config
+      launch: real.launch.py  # franka_hardware + gripper + move_group
+      args: {robot_ip: '{robot_ip}', use_rviz: '{rviz}'}

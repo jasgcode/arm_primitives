@@ -1,0 +1,13 @@
+# Command the arm's gripper.
+string OPEN=open
+string CLOSE=close
+string GRASP=grasp
+string MOVE=move
+string HOME=home
+
+string command   # one of the constants above
+float64 width    # m; move: target width, grasp: expected object width (0 = gripper default)
+float64 force    # N; grasp only (0 = gripper default)
+---
+bool success
+string message

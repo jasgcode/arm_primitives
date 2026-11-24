@@ -1,0 +1,7 @@
+# Move to joint positions. Joints of the planning group that are not listed keep their value.
+string[] names
+float64[] positions                # rad (or m for prismatic joints)
+float64 velocity_scaling           # (0, 1]; 0 = arm default
+---
+bool success
+string message

@@ -1,0 +1,26 @@
+# ty config for this repo (expects to live at <ws>/src/arm_primitives, with the franka
+# workspace at <ws>/src/franka). Same rules as the workspace root ty.toml.
+[environment]
+python-version = "3.14"
+# rclpy and the ROS message packages live outside the venv.
+# rclpy ships a py.typed marker, so its annotations are used as-is.
+extra-paths = [
+    # The arm_primitives package itself (the repo root holds a same-named folder).
+    "arm_primitives",
+    "/opt/ros/lyrical/lib/python3.14/site-packages",
+    # Apt-installed deps the ament tests use (pytest, setuptools, numpy, yaml).
+    "/usr/lib/python3/dist-packages",
+    # Generated interfaces: build them first (ty errors if a dir is missing).
+    "../../install/arm_primitives_interfaces/lib/python3.14/site-packages",
+    "../franka/install/lib/python3.14/site-packages",
+]
+
+[src]
+exclude = ["build", "install", "log"]
+
+[rules]
+# Strict: every rule, including the ones off or warn-only by default, is an error.
+all = "error"
+
+[terminal]
+error-on-warning = true
