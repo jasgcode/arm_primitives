@@ -23,27 +23,16 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>std_srvs</exec_depend>
 
-  <!-- bringup -->
-  <exec_depend>controller_manager</exec_depend>
-  <exec_depend>joint_state_broadcaster</exec_depend>
-  <exec_depend>joint_trajectory_controller</exec_depend>
+  <!-- bringup (arm.launch.py includes the arms' own launch files) -->
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
-  <exec_depend>moveit_configs_utils</exec_depend>
-  <exec_depend>moveit_kinematics</exec_depend>
-  <exec_depend>moveit_planners</exec_depend>
-  <exec_depend>moveit_ros_move_group</exec_depend>
-  <exec_depend>moveit_simple_controller_manager</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>rviz2</exec_depend>
-  <exec_depend>xacro</exec_depend>
 
   <!-- arms -->
   <exec_depend>franka_fer_moveit_config</exec_depend>
   <exec_depend>franka_gripper</exec_depend>
   <exec_depend>franka_msgs</exec_depend>
-  <exec_depend>ur_description</exec_depend>
   <exec_depend>ur_moveit_config</exec_depend>
+  <exec_depend>ur_robot_driver</exec_depend>
 
   <test_depend>python3-pytest</test_depend>
 

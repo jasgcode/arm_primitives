@@ -16,16 +16,17 @@ not writing new code.
                            compute_cartesian_path, apply_planning_scene)
                         |
       config/arms/fer.yaml  ->  franka_ros2 (mock or real)   + franka_gripper
-      config/arms/ur7e.yaml ->  ur_mock.launch.py (mock)     | ur_robot_driver (real)
+      config/arms/ur7e.yaml ->  ur_robot_driver (use_mock_hardware for mock) + ur_moveit_config
 ```
 
 ## Status
 Tested on ros2_control mock hardware with MoveIt for both arms (`ros2 run arm_primitives demo`
 passes on `fer` and `ur7e`: named/joint/pose/relative/Cartesian moves land within 2 mm and
 0.015 rad, IK/FK, planning scene, Franka gripper, pick and place, attach/detach) and through
-every service. Not yet run on the real robots: the `real` bringups include the vendors' launch
-files (`franka_fer_moveit_config/real.launch.py`, `ur_robot_driver/ur_control.launch.py` +
-`ur_moveit_config/ur_moveit.launch.py`) and are untested.
+every service. On the real UR7e, the two launch files `hardware:=real` includes
+(`ur_robot_driver/ur_control.launch.py` + `ur_moveit_config/ur_moveit.launch.py`) have been run and
+MoveIt control from RViz works; the primitives themselves have not been run on it yet. The real
+FER bringup (`franka_fer_moveit_config/real.launch.py`) is untested.
 
 ## Packages
 | Package | Contents |
@@ -43,18 +44,17 @@ m-elwin's Lyrical fork of `franka_ros2`), plus `franka_description` and `libfran
 cd src/franka && colcon build --merge-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 ```
 
-**UR7e**: `ur_description` and `ur_moveit_config`. With apt:
+**UR7e**: the UR driver (it brings `ur_description`) and `ur_moveit_config`, for mock and real
+hardware alike:
 ```bash
-sudo apt install ros-lyrical-ur-description ros-lyrical-ur-moveit-config
+sudo apt install ros-lyrical-ur-robot-driver ros-lyrical-ur-moveit-config
 ```
-or from source in `src/ur` (the same versions as apt):
+If `ur_moveit_config` can't come from apt, build it from source in `src/ur` (the driver's version):
 ```bash
 mkdir -p src/ur && cd src/ur
-git clone --depth 1 --branch 4.3.1 https://github.com/UniversalRobots/Universal_Robots_ROS2_Description.git ur_description
 git clone --depth 1 --branch 6.1.0 https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-colcon build --merge-install --packages-select ur_description ur_moveit_config --cmake-args -DBUILD_TESTING=OFF
+colcon build --merge-install --packages-select ur_moveit_config --cmake-args -DBUILD_TESTING=OFF
 ```
-A real UR7e also needs the driver: `sudo apt install ros-lyrical-ur-robot-driver`.
 
 ## Build
 This repo lives in `<ws>/src/arm_primitives`. With the arm workspaces as underlays (deactivate
@@ -62,7 +62,7 @@ any Python venv first):
 ```bash
 source /opt/ros/lyrical/setup.bash
 source src/franka/install/setup.bash
-source src/ur/install/setup.bash        # skip if the UR packages came from apt
+source src/ur/install/setup.bash        # skip if ur_moveit_config came from apt
 colcon build --packages-select arm_primitives_interfaces arm_primitives
 source install/setup.bash
 ```

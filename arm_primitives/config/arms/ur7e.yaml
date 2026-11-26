@@ -1,6 +1,6 @@
 # Universal Robots UR7e (no gripper by default).
-# Needs ur_description and ur_moveit_config; a real arm also needs ur_robot_driver
-# (sudo apt install ros-lyrical-ur-robot-driver).
+# Needs ur_robot_driver (sudo apt install ros-lyrical-ur-robot-driver, which brings
+# ur_description) and ur_moveit_config, for mock and real hardware alike.
 name: ur7e
 description: Universal Robots UR7e 6-DoF arm
 
@@ -43,11 +43,19 @@ gripper:
   # Set ee_link and touch_links to the gripper's TCP and finger links as well.
 
 # Launch files arm.launch.py includes. {robot_ip} and {rviz} are filled in from its arguments.
+# Mock and real use the same UR driver launch, so mock runs the real robot's controllers.
 bringup:
   mock:
-    - package: arm_primitives
-      launch: ur_mock.launch.py  # mock_components hardware + controllers + move_group
-      args: {ur_type: ur7e, rviz: '{rviz}'}
+    - package: ur_robot_driver
+      launch: ur_control.launch.py
+      args:
+        ur_type: ur7e
+        use_mock_hardware: 'true'  # mock_components; skips the dashboard and robot helpers
+        robot_ip: 0.0.0.0  # required by the launch file, unused with mock hardware
+        launch_rviz: 'false'  # MoveIt's rviz below instead
+    - package: ur_moveit_config
+      launch: ur_moveit.launch.py
+      args: {ur_type: ur7e, launch_rviz: '{rviz}'}
   real:
     - package: ur_robot_driver
       launch: ur_control.launch.py
@@ -55,7 +63,7 @@ bringup:
         ur_type: ur7e
         robot_ip: '{robot_ip}'
         launch_rviz: 'false'
-        initial_joint_controller: joint_trajectory_controller  # the one MoveIt is set up for
+        launch_dashboard_client: 'false'  # PolyScope X has no dashboard server
     - package: ur_moveit_config
       launch: ur_moveit.launch.py
       args: {ur_type: ur7e, launch_rviz: '{rviz}'}
